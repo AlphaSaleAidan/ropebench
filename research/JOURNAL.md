@@ -44,3 +44,22 @@ Log-log fit: **full-history O(n^1.34), rope O(n^0.73) → rope advantage O(n^0.6
 The memory hierarchy's payoff is a power law in session length — the longer the
 session, the bigger the win. Backbone of Finding 2 ("no carry-everything past a
 point"). Shipped `test_theory_t1.py`.
+
+### Entry 3 — T4 CONFIRMED (counterintuitive): tighter rope = better (2026-07-04)
+Rope budget sweep (scripted, 3 seeds, 80 turns):
+| budget | acc | long | tokens | efficiency | retrieval |
+|---|---|---|---|---|---|
+| 400 | 97% | 100% | 38K | **25.3** | 72% |
+| 600 | 93% | 96% | 51K | 18.3 | 56% |
+| 1000 | 93% | 96% | 70K | 13.3 | 46% |
+| 1600 | 90% | 75% | 105K | 8.6 | 20% |
+| 2400 | 100% | 100% | 130K | 7.7 | 29% |
+| 3600 | 100% | 100% | 180K | 5.6 | 0% |
+
+**Efficiency is maximized at the TIGHTEST satisfiable budget** and falls
+monotonically as the budget grows — a smaller rope forces more retrieval and
+the vault compensates, so accuracy stays high (97% at budget 400). Actionable:
+default to the smallest satisfiable budget, not a comfortable one.
+Note a **"valley of the middle budget"** (1600 → 90%, long 75%, retrieval only
+20%): facts half-demoted, neither resident nor eagerly retrieved. Flagged for
+more seeds. Shipped `test_theory_t4.py`.
