@@ -78,3 +78,17 @@ words a literal reader matches on** — recall drops 11 points. The distinctive
 substitution) is safe. **Implication:** ai-native needs a capable reader that
 decodes via the legend, not a keyword-matcher — connects to T6 (capability ×
 density). Shipped `test_theory_t2.py`.
+
+### Entry 5 — T3 CONFIRMED: structure beats a flat dense blob (2026-07-04)
+Same 600-token budget, same densify, same retrieval vault — rope vs a flat
+dense blob (rope minus structure):
+| regime | acc | long | med | efficiency |
+|---|---|---|---|---|
+| rope (structured) | 93% | **96%** | 88% | 18.3 |
+| flat-dense | 90% | **62%** | 100% | 16.2 |
+
+Structure's value is **concentrated in OLD facts** — 96% vs 62% at long
+distance, a 34-point gap. The never-demoted STATE/GOALS + KEYS index give old
+facts a durable home and a findable pointer; a flat blob drops them into
+semantic-search-only limbo. (Flat-dense edges medium — recent facts in the blob
+are trivially present.) Shipped `test_theory_t3.py` incl. a `FlatDenseRegime`.
