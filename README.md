@@ -94,6 +94,26 @@ evict) — reported honestly, not hidden. `CLAIMS.md` C8, `tests/test_b6.py`.
 
 ---
 
+## Findings from ongoing research
+
+Beyond the four headline findings, an autonomous research loop tests independent
+sub-theories of the core claim. Confirmed so far (each with a regression test in
+`tests/test_theory_*.py`, full writeup in [THEORY.md](THEORY.md)):
+
+- **T1 — value grows with session length.** Full-history cost O(n^1.34), rope
+  O(n^0.73); the rope's advantage grows O(n^0.61) — 4.5× cheaper at 260 turns.
+- **T2 — density has a floor.** Over-aggressive dictionary coding (ai-native)
+  drops a literal reader's recall 93%→82% by coding away matchable context words.
+- **T3 — structure beats a flat dense blob.** Same budget/retrieval, only
+  structure differs: 96% vs 62% at long distance — structure's whole value is
+  in old facts.
+- **T4 — tighter is better (counterintuitive).** Efficiency is maximized at the
+  *smallest* satisfiable budget (25.3 @ 400 tok vs 5.6 @ 3600) — a smaller rope
+  forces retrieval and the vault compensates.
+
+The statistics themselves are validated: over 100k simulated experiments the
+bootstrap 95% CI covers the true value ~95% of the time.
+
 ## How it works
 
 Same seeded session stream through each condition; probes with **owned ground
