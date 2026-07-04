@@ -63,3 +63,18 @@ default to the smallest satisfiable budget, not a comfortable one.
 Note a **"valley of the middle budget"** (1600 → 90%, long 75%, retrieval only
 20%): facts half-demoted, neither resident nor eagerly retrieved. Flagged for
 more seeds. Shipped `test_theory_t4.py`.
+
+### Entry 4 — T2 CONFIRMED (with nuance): density has a floor (2026-07-04)
+Same 600-token budget, three notation profiles, scripted reader:
+| profile | acc | long | rope tokens |
+|---|---|---|---|
+| symbolic-en | 93% | 96% | 418 |
+| cjk-dense | 94% | 100% | 520 |
+| **ai-native** | **82%** | 88% | 485 |
+
+ai-native's adaptive §-dictionary saves tokens but **codes away the context
+words a literal reader matches on** — recall drops 11 points. The distinctive
+*values* survive verbatim; matchability doesn't. cjk-dense (lighter, single-char
+substitution) is safe. **Implication:** ai-native needs a capable reader that
+decodes via the legend, not a keyword-matcher — connects to T6 (capability ×
+density). Shipped `test_theory_t2.py`.
