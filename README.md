@@ -31,13 +31,13 @@ reference implementation), and **rope-unbound / streaming**.
 
 Auto-summarization is the industry default. It is also the worst performer on
 exactly the thing you ask about later. Scored by **fact age** (when a fact was
-introduced), scripted reader, 5 seeds:
+introduced), scripted reader, 20 seeds (n=600):
 
 | fact age | n | summary recall | rope recall | difference | 95% CI |
 |---|---|---|---|---|---|
-| **early** (oldest) | 65 | 74% | 94% | **−20.0%** | [−32.3%, −7.7%] |
-| **mid** | 70 | 61% | 91% | **−30.0%** | [−42.9%, −17.1%] |
-| **late** (recent) | 15 | 100% | 100% | +0.0% | [0%, 0%] |
+| **early** (oldest) | 260 | 72% | 95% | **−22.7%** | [−28.5%, −16.9%] |
+| **mid** | 280 | 67% | 92% | **−25.4%** | [−31.8%, −18.9%] |
+| **late** (recent) | 60 | 100% | 100% | +0.0% | [0%, 0%] |
 
 The damage is real and significant (both CIs clear zero) and it is
 **concentrated in old facts** — recent facts are untouched. This is the effect
