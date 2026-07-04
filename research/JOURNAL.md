@@ -92,3 +92,23 @@ distance, a 34-point gap. The never-demoted STATE/GOALS + KEYS index give old
 facts a durable home and a findable pointer; a flat blob drops them into
 semantic-search-only limbo. (Flat-dense edges medium — recent facts in the blob
 are trivially present.) Shipped `test_theory_t3.py` incl. a `FlatDenseRegime`.
+
+### Entry 6 — T8 CONFIRMED: rope is noise-robust; the gap widens (2026-07-04)
+Accuracy vs filler ratio (chatty level), scripted, 3 seeds:
+| chatty | full | truncate | summary | rope |
+|---|---|---|---|---|
+| 0 | 100% | 86% | 72% | 93% |
+| 4 | 100% | 51% | 44% | 72% |
+| 16 | 100% | 16% | 16% | **44%** |
+
+Truncate/summary **collapse** as filler grows (facts scroll out / get compacted);
+the rope degrades far more gracefully (93%→44%) and its margin over the lossy
+baselines **widens** with noise (rope−truncate: 7pt→28pt). The rope isn't immune
+in this event-driven model — heavy filler still pressures it — which points once
+more at streaming eviction (B6) as the true noise-handling mechanism. Full-history
+stays 100% but is the impossible-on-long-sessions oracle. Shipped `test_theory_t8.py`.
+
+### T5 note (deferred)
+Section/recency ordering is a live-model "lost in the middle" effect; the scripted
+literal reader is position-invariant (scans all lines by overlap), so T5 needs a
+live run to measure — queued for a live cycle.
