@@ -5,9 +5,10 @@ from __future__ import annotations
 import csv
 import io
 
-from .runner import BUCKETS, KINDS, RegimeMetrics
+from .runner import BUCKETS, KINDS, ProbeFilter, RegimeMetrics, paired
 
 _ORDER = ("full-history", "truncate", "summary", "rope", "rope-unbound")
+_TERCILES = ("early", "mid", "late")
 
 
 def _ordered(metrics: dict[str, RegimeMetrics]) -> list[RegimeMetrics]:
@@ -33,6 +34,53 @@ def markdown(metrics: dict[str, RegimeMetrics]) -> str:
             f"{m.efficiency:.1f}",
         ]
         lines.append("| " + " | ".join(cells) + " |")
+    return "\n".join(lines)
+
+
+def paired_table(metrics: dict[str, RegimeMetrics], anchor: str = "rope") -> str:
+    """Per condition-pair: n, point diff, 95% CI, verdict — anchored on the
+    rope, so every claim in prose has a traceable CI (S1)."""
+    if anchor not in metrics:
+        return ""
+    lines = [
+        f"| {anchor} vs | n | {anchor} acc | other acc | diff | 95% CI | verdict |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for name in _ORDER:
+        if name == anchor or name not in metrics:
+            continue
+        r = paired(metrics[anchor], metrics[name])
+        lines.append(
+            f"| {name} | {r.n} | {r.mean_a:.0%} | {r.mean_b:.0%} | "
+            f"{r.diff:+.1%} | [{r.ci_low:+.1%}, {r.ci_high:+.1%}] | "
+            f"{r.verdict.replace('A-', anchor + '-')} |"
+        )
+    return "\n".join(lines)
+
+
+def age_stratified_table(
+    metrics: dict[str, RegimeMetrics], n_turns: int,
+    condition: str = "summary", anchor: str = "rope",
+) -> str:
+    """Recall by fact-age tercile — the lead figure for 'summaries eat OLD
+    facts'. Compares ``condition`` against ``anchor`` per tercile with CIs."""
+    if condition not in metrics or anchor not in metrics:
+        return ""
+    lines = [
+        f"| fact age | n | {condition} recall | {anchor} recall | diff | 95% CI |",
+        "|---|---|---|---|---|---|",
+    ]
+    def in_tercile(tercile: str) -> ProbeFilter:
+        return lambda p: p.age_tercile(n_turns) == tercile
+
+    for tercile in _TERCILES:
+        r = paired(metrics[condition], metrics[anchor], where=in_tercile(tercile))
+        if r.n == 0:
+            continue
+        lines.append(
+            f"| {tercile} | {r.n} | {r.mean_a:.0%} | {r.mean_b:.0%} | "
+            f"{r.diff:+.1%} | [{r.ci_low:+.1%}, {r.ci_high:+.1%}] |"
+        )
     return "\n".join(lines)
 
 

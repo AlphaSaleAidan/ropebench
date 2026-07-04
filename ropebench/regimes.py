@@ -204,11 +204,25 @@ class RopeUnboundRegime(RopeRegime):
         # No jump: the rope is the persistent record.
 
 
-def default_regimes(budget_tokens: int = 800) -> list[RegimeBase]:
-    return [
+# Short aliases accepted on the CLI (--conditions), mapped to regime names.
+CONDITION_ALIASES = {
+    "carry": "full-history", "full": "full-history",
+    "truncate": "truncate", "summarize": "summary", "summary": "summary",
+    "rope": "rope", "unbound": "rope-unbound", "rope-unbound": "rope-unbound",
+}
+
+
+def default_regimes(
+    budget_tokens: int = 800, only: list[str] | None = None
+) -> list[RegimeBase]:
+    all_regimes: list[RegimeBase] = [
         FullHistoryRegime(),
         TruncateRegime(budget_tokens=budget_tokens),
         SummaryRegime(budget_tokens=budget_tokens),
         RopeRegime(rope_budget_tokens=600),
         RopeUnboundRegime(),
     ]
+    if only is None:
+        return all_regimes
+    wanted = {CONDITION_ALIASES.get(c, c) for c in only}
+    return [r for r in all_regimes if r.name in wanted]
