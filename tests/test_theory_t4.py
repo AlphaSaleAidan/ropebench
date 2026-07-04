@@ -19,7 +19,9 @@ from ropebench.scenario import generate
 
 
 def _sweep(budget: int) -> tuple[float, float, float]:
-    accs, effs, retrs = [], [], []
+    accs: list[float] = []
+    effs: list[float] = []
+    retrs: list[float] = []
     model = ScriptedModel()
     for seed in (1, 2):
         r = RopeRegime(
@@ -28,7 +30,9 @@ def _sweep(budget: int) -> tuple[float, float, float]:
                               jump_threshold_tokens=budget * 3, jump_every_n_turns=8),
         )
         m = run_scenario(generate(seed, n_turns=80), [r], model)["rope"]
-        accs.append(m.accuracy()); effs.append(m.efficiency); retrs.append(m.retrieval_rate)
+        accs.append(m.accuracy())
+        effs.append(m.efficiency)
+        retrs.append(m.retrieval_rate)
     return sum(accs) / 2, sum(effs) / 2, sum(retrs) / 2
 
 
