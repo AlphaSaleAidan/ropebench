@@ -1,0 +1,36 @@
+{
+  "rope_vs_summary_n20": {
+    "n": 600,
+    "diff": 0.2167,
+    "ci": [
+      0.1767,
+      0.2567
+    ],
+    "verdict": "A-better"
+  },
+  "rope_vs_full-history_n20": {
+    "n": 600,
+    "diff": -0.06,
+    "ci": [
+      -0.08,
+      -0.0417
+    ],
+    "verdict": "A-worse"
+  },
+  "rope_vs_truncate_n20": {
+    "n": 600,
+    "diff": 0.07,
+    "ci": [
+      0.0367,
+      0.1033
+    ],
+    "verdict": "A-better"
+  },
+  "age_stratified_n20": "| fact age | n | summary recall | rope recall | diff | 95% CI |\n|---|---|---|---|---|---|\n| early | 260 | 72% | 95% | -22.7% | [-28.5%, -16.9%] |\n| mid | 280 | 67% | 92% | -25.4% | [-31.8%, -18.9%] |\n| late | 60 | 100% | 100% | +0.0% | [+0.0%, +0.0%] |",
+  "coverage_100k": {
+    "trials": 100000,
+    "empirical": 0.9462,
+    "nominal": 0.95
+  },
+  "elapsed_min": 13.2
+}
