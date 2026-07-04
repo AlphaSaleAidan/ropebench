@@ -20,3 +20,13 @@ honest accuracy cost vs the (often-impossible) full-transcript oracle.
 - T6: model capability × retrieval — stronger models exploit the vault more
 
 ## Log
+
+### Entry 1 — statistical machinery validated at scale (2026-07-04)
+Ran 30k iterations of property/stress tests:
+- **Bootstrap CI coverage: 0.9492 empirical vs 0.95 nominal** (20,000 simulated
+  paired experiments, true diff +0.20, n=40). The CIs report the coverage they
+  claim — the hardened numbers are trustworthy.
+- Scenario determinism: 0 mismatches / 5,000 seeds.
+- Ground-truth invariant: 0 unanswerable planted probes / 5,000 seeds.
+Shipped: a calibration test (`test_stats_calibration.py`, moderate trials for CI
++ a `local`-marked full 20k run).
