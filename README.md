@@ -110,6 +110,22 @@ sub-theories of the core claim. Confirmed so far (each with a regression test in
 - **T4 — tighter is better (counterintuitive).** Efficiency is maximized at the
   *smallest* satisfiable budget (25.3 @ 400 tok vs 5.6 @ 3600) — a smaller rope
   forces retrieval and the vault compensates.
+- **T7 — exact addressing survives distractors; semantic search collapses.**
+  Flood the store with near-duplicate facts (same wording, different value) and
+  ask for one back: flat semantic recall falls 100%→0% as N grows 0→64 (it
+  tracks — and undershoots — the `k/(N+1)` chance line), while the rope's
+  turn-stamped KEYS handle is an *exact* content-addressed fetch and stays
+  **100% at every N**. This is the mechanism behind T3: structure wins because it
+  makes old facts *addressable*. **Writing the rope in an AI-native language makes
+  this stronger** — denser coding removes even more surface variance, so semantic
+  search on the coded near-duplicates fails *faster* (48%→33% at N=4), widening a
+  gap the exact fetch already owns. It also resolves T2's tension: aggressive
+  AI-native coding is safe *on the retrieval tier* precisely because retrieval
+  there is exact, not fuzzy.
+- **T8 — the rope is noise-robust and its margin widens with filler.** As
+  conversational filler grows, lossy baselines collapse (truncate/summary 16% at
+  16× filler) while the rope degrades gracefully (44%); the rope−truncate margin
+  grows 7pt→28pt.
 
 The statistics themselves are validated: over 100k simulated experiments the
 bootstrap 95% CI covers the true value ~95% of the time.

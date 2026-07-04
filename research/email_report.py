@@ -1,5 +1,8 @@
 """Send a progress email via Resend. Key from /root/.secrets/ropebench-resend.env (ROTATE)."""
-import json, os, sys, urllib.request
+import json
+import sys
+import urllib.request
+
 
 def load_key():
     for line in open("/root/.secrets/ropebench-resend.env"):

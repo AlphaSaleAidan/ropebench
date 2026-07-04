@@ -19,6 +19,9 @@ Regenerate CI-tier rows from a fresh clone with the commands in
 | C10 | Real 117-turn transcript token size | 1.35M tok | — | existence proof | `results/live-haiku-full` / Phase 5 | `jrope-bench run --transcript <session>` |
 | C11 | Rope carries the same real session in | ~75K tok (18× smaller) | — | same | same | same |
 | C12 | Bootstrap CI coverage (statistical validity) | 0.9462 | 100,000 | ~0.95 nominal | `tests/test_stats_calibration.py` | `pytest -m local -k coverage_full` |
+| C13 | **T8** — rope is noise-robust: acc at 16× filler vs lossy baselines | rope 44% vs truncate/summary 16% | 3 seeds | rope−truncate margin 7pt→28pt as filler grows | `tests/test_theory_t8.py` | `pytest -m local tests/test_theory_t8.py` |
+| C14 | **T7** — flat semantic recall of a specific fact collapses under near-duplicates | 100%→0% (N=0→64); rope exact-fetch 100% throughout | 8 seeds × 20 targets | tracks/undershoots chance k/(N+1) | `tests/test_theory_t7.py`, `research/exp_t7_distractors.py` | `pytest -m local tests/test_theory_t7.py` |
+| C15 | **T7** — AI-native coding makes semantic search fail *faster* (widens exact-vs-semantic gap) | flat 48%→33% at N=4 (symbolic→ai-native); rope 100% both | 8 seeds × 20 targets | — | same | same |
 
 ## Corrected claims (correction history, kept visible)
 

@@ -112,3 +112,48 @@ stays 100% but is the impossible-on-long-sessions oracle. Shipped `test_theory_t
 Section/recency ordering is a live-model "lost in the middle" effect; the scripted
 literal reader is position-invariant (scans all lines by overlap), so T5 needs a
 live run to measure — queued for a live cycle.
+
+### Entry 7 — T7 CONFIRMED: exact addressing is distractor-immune; semantic search collapses (2026-07-04)
+Fill the vault with one target fact + N *near-duplicate* distractors (same
+sentence, different value token) and ask for the target back. 8 seeds × 20
+targets, k=3:
+
+| N distractors | flat semantic | rope exact (KEYS) | chance k/(N+1) |
+|---|---|---|---|
+| 0 | 100% | 100% | 100% |
+| 4 | 48% | **100%** | 60% |
+| 8 | 17% | **100%** | 33% |
+| 16 | 8% | **100%** | 18% |
+| 32 | 1% | **100%** | 9% |
+| 64 | 0% | **100%** | 5% |
+
+Semantic recall of a *specific* fact **collapses to chance and below** as
+near-duplicates crowd in — the distinctive value is one token in a sea of shared
+context, so cosine rank is ≈ random among the N+1 near-identical rows (flat even
+dips *under* the k/(N+1) line: at N=4, 48% < 60%). The rope's turn-stamped KEYS
+handle (`t{turn}·topic → key`) is an exact content-addressed fetch — **100%
+regardless of N.** This isolates the mechanism behind T3: what makes *structure*
+win is that it makes an old fact *addressable*, not merely present.
+
+**AI-native makes the outcome stronger (answering the "write the rope in an AI
+native language" ask).** Re-run under the `ai-native` profile:
+
+| N | flat semantic (symbolic-en) | flat semantic (ai-native) |
+|---|---|---|
+| 4 | 48% | **33%** |
+| 8 | 17% | **14%** |
+| 16 | 8% | **6%** |
+
+Denser §-coding removes even more surface variance, so semantic search on the
+coded near-duplicates fails *faster* — widening the gap the exact fetch (still
+100%) already owns. This resolves the T2 tension: aggressive AI-native coding is
+**safe on the retrieval tier precisely because retrieval there is exact, not
+fuzzy.** T2's warning was about a *literal keyword reader* on the resident rope;
+T7 shows the vault, addressed by key, is immune — so densify the archive freely.
+
+Honest cost: the KEYS index is not free — one handle line ≈ a raw fact's tokens
+(17 vs 14 here). You pay ~1 line per fact you choose to make addressable; under a
+fixed budget that caps how many facts get a handle. The win is not "free recall,"
+it's "recall you can *buy* one line at a time, immune to store size." Shipped
+`tests/test_theory_t7.py` (marked `local`) + `research/exp_t7_distractors.py` +
+`assets/chart-distractors.svg`.
