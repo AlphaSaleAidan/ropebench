@@ -30,3 +30,17 @@ Ran 30k iterations of property/stress tests:
 - Ground-truth invariant: 0 unanswerable planted probes / 5,000 seeds.
 Shipped: a calibration test (`test_stats_calibration.py`, moderate trials for CI
 + a `local`-marked full 20k run).
+
+### Entry 2 — T1 CONFIRMED: value grows with session length (2026-07-04)
+Scripted sweep, session length 40→260 turns:
+| turns | full/rope tokens | rope efficiency advantage |
+|---|---|---|
+| 40 | 1.44× | 1.38× |
+| 120 | 2.52× | 2.41× |
+| 200 | 3.66× | 3.58× |
+| 260 | 4.55× | 4.50× |
+
+Log-log fit: **full-history O(n^1.34), rope O(n^0.73) → rope advantage O(n^0.61).**
+The memory hierarchy's payoff is a power law in session length — the longer the
+session, the bigger the win. Backbone of Finding 2 ("no carry-everything past a
+point"). Shipped `test_theory_t1.py`.
