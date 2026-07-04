@@ -202,7 +202,7 @@ class OpenAICompatModel:
         api_key: str = "",
         chat_fn: ChatFn | None = None,
         max_retrieval_rounds: int = 2,
-        cache_dir: str | Path | None = "bench_cache",
+        cache_dir: str | Path | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.model = model
