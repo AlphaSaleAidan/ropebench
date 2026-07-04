@@ -108,3 +108,20 @@ def test_deterministic_across_runs() -> None:
     a = run_benchmark(seeds=[3], n_turns=40)
     b = run_benchmark(seeds=[3], n_turns=40)
     assert json.dumps(markdown(a)) == json.dumps(markdown(b))
+
+
+def test_chatty_scenario_rope_efficiency_wins() -> None:
+    """B5: with facts wrapped in conversational filler (real-transcript
+    shape), bound rope keeps the best accuracy-per-token — full history
+    pays for all the padding, the rope distills it."""
+    metrics = run_benchmark(seeds=SEEDS, n_turns=TURNS, chatty=4)
+    full = metrics["full-history"]
+    rope = metrics["rope"]
+    print("\n[chatty] " + markdown(metrics).splitlines()[-2])
+    # Padding inflates the oracle's bill; the rope's efficiency lead widens.
+    assert rope.efficiency > full.efficiency
+    assert rope.total_tokens < full.total_tokens
+    # Rope still recovers a solid majority of facts under the noise.
+    assert rope.accuracy() >= 0.65
+    # And the lossy baselines degrade hard on the padded stream.
+    assert metrics["summary"].accuracy(bucket="long") < 0.3
